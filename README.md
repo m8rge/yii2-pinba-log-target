@@ -20,3 +20,10 @@ Add to yii2 config:
     ],
 ],
 ```
+
+Profile in code:
+```php
+\Yii::beginProfile($token, $category);
+// ...
+\Yii::endProfile($token, $category);
+```
