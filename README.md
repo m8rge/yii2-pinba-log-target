@@ -10,8 +10,8 @@ Add to yii2 config:
             'targets' => [
                 [
                     'class' => \app\components\PinbaLogTarget::class,
+                    'pinbaHost' => 'pinba.engine.host.name.com', // required
                     'enabled' => true,
-                    'pinbaHost' => 'pinba.engine.host.name.com',
                     'serverName' => 'myapp.com', // especially usefull in cli scripts
                     'excludeScriptNames' => ['/debug/*'], // do not profile debug panel
                 ],
