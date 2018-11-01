@@ -9,7 +9,7 @@ Add to yii2 config:
         'log' => [
             'targets' => [
                 [
-                    'class' => \app\components\PinbaLogTarget::class,
+                    'class' => \m8rge\pinba\PinbaLogTarget::class,
                     'pinbaHost' => 'pinba.engine.host.name.com', // required
                     'enabled' => true,
                     'serverName' => 'myapp.com', // especially usefull in cli scripts
