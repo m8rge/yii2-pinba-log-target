@@ -1,0 +1,34 @@
+{
+    "name": "m8rge/yii2-pinba-log-target",
+    "description": "Pinba log target for Yii2",
+    "type": "library",
+    "keywords": [
+        "yii2", "pinba", "profiling", "profile", "yii2-pinba", "log", "target"
+    ],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "m8rge",
+            "email": "to.merge@gmail.com",
+            "homepage": "http://aputilov.ru"
+        }
+    ],
+    "require": {
+        "php": ">=7.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "m8rge\\pinba\\": "src/"
+        }
+    },
+    "require-dev": {
+        "misterion/pinba-phpdoc": "dev-master",
+        "yiisoft/yii2": "^2.0.15"
+    },
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "https://asset-packagist.org"
+        }
+    ]
+}
