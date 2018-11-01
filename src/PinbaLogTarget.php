@@ -116,7 +116,7 @@ class PinbaLogTarget extends \yii\log\Target
     {
         foreach ($excludeMasks as $excludeMask) {
             $haveAsterisk = substr_compare($excludeMask, '*', -1, 1) === 0;
-            $match = $haveAsterisk && strpos($string[2], rtrim($excludeMask, '*')) === 0 ||
+            $match = $haveAsterisk && strpos($string, rtrim($excludeMask, '*')) === 0 ||
                 !$haveAsterisk && $excludeMask === $string;
 
             if ($match){
