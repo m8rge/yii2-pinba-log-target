@@ -75,7 +75,7 @@ class PinbaLogTarget extends \yii\log\Target
     {
         $timers = [];
         foreach ($this->messages as $message) {
-            [$token, $level, $category, $timestamp] = $message;
+            list($token, $level, $category, $timestamp) = $message;
             if ($level === Logger::LEVEL_PROFILE_BEGIN) {
                 $timers[md5($category . $token)] = $timestamp;
             } elseif ($level === Logger::LEVEL_PROFILE_END) {
@@ -86,7 +86,12 @@ class PinbaLogTarget extends \yii\log\Target
         }
     }
 
-    protected function pinbaTimerAdd(string $category, string $token, float $time): void
+    /**
+     * @param string $category
+     * @param string $token
+     * @param float $time
+     */
+    protected function pinbaTimerAdd($category, $token, $time)
     {
         $pinbaCategory = 'app';
         if (false !== $delimiterPos = strpos($category, '::')) {
@@ -100,7 +105,10 @@ class PinbaLogTarget extends \yii\log\Target
             ] + $this->systemTags, $time);
     }
 
-    protected function getRequestIdentifier(): string
+    /**
+     * @return string
+     */
+    protected function getRequestIdentifier()
     {
         if (isset($_SERVER['REQUEST_URI'])) {
             $uriArray = explode('?', $_SERVER['REQUEST_URI'], 2);
@@ -112,7 +120,12 @@ class PinbaLogTarget extends \yii\log\Target
         return $identifier;
     }
 
-    protected function match(string $string, array $excludeMasks): bool
+    /**
+     * @param string $string
+     * @param string[] $excludeMasks
+     * @return bool
+     */
+    protected function match($string, $excludeMasks)
     {
         foreach ($excludeMasks as $excludeMask) {
             $haveAsterisk = substr_compare($excludeMask, '*', -1, 1) === 0;
