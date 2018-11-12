@@ -21,7 +21,7 @@ class PinbaLogTarget extends \yii\log\Target
     /**
      * @var int
      */
-    public $tagMaxLength = 200;
+    public $tagMaxLength = 100;
 
     /**
      * @var string[]
@@ -81,7 +81,17 @@ class PinbaLogTarget extends \yii\log\Target
             } elseif ($level === Logger::LEVEL_PROFILE_END) {
                 $deltaTime = $timestamp - $timers[md5($category . $token)];
 
-                $this->pinbaTimerAdd($category, $token, $deltaTime);
+                if (strpos($category, 'yii\db') === 0) {
+                    preg_match('/\w+/', $token, $matches);
+                    $operation = strtolower($matches[0]);
+                    $category = 'db::' . $operation;
+                } else {
+                    $lastSlashPosition = strrpos($category, '\\');
+                    $lastSlashPosition = $lastSlashPosition ? $lastSlashPosition + 1 : 0;
+                    $category = substr($category, $lastSlashPosition);
+                }
+
+                $this->pinbaTimerAdd($category, '', $deltaTime);
             }
         }
     }
@@ -98,11 +108,15 @@ class PinbaLogTarget extends \yii\log\Target
             $pinbaCategory = substr($category, 0, $delimiterPos);
         }
 
-        pinba_timer_add([
-                'group' => $category,
+        $timerData = [
+                'group' => mb_substr($category, 0, $this->tagMaxLength),
                 'category' => $pinbaCategory,
-                'token' => mb_substr($token, 0, $this->tagMaxLength),
-            ] + $this->systemTags, $time);
+            ] + $this->systemTags;
+        if ($token) {
+            $timerData['token'] = mb_substr($token, 0, $this->tagMaxLength);
+        }
+
+        pinba_timer_add($timerData, $time);
     }
 
     /**
@@ -132,7 +146,7 @@ class PinbaLogTarget extends \yii\log\Target
             $match = $haveAsterisk && strpos($string, rtrim($excludeMask, '*')) === 0 ||
                 !$haveAsterisk && $excludeMask === $string;
 
-            if ($match){
+            if ($match) {
                 return true;
             }
         }
